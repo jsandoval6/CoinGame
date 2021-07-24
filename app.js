@@ -10,14 +10,54 @@ function isTouching(a, b) {
 	);
 }
 
+const rightBtn = document.querySelector('.right');
+const leftBtn = document.querySelector('.left');
+const upBtn = document.querySelector('.up');
+const downBtn = document.querySelector('.down');
 const avatar = document.querySelector('#player');
 const coin = document.querySelector('#coin');
 const score = document.querySelector('#scoreNumber');
 let collectedCoin = 0;
+
+
+rightBtn.addEventListener('click', function (e) {
+	const currLeft = extractPosition(avatar.style.left);
+	if (currLeft + 50 < window.innerWidth - avatar.getBoundingClientRect().width) {
+		moveHorizontal(avatar, 50, currLeft)
+		avatar.style.transform = 'scale(1,1)';
+	}
+	CheckIsTouching();
+});
+
+leftBtn.addEventListener('click', function (e) {
+	const currLeft = extractPosition(avatar.style.left);
+	if (currLeft - 50 > 0) {
+		moveHorizontal(avatar, -50, currLeft)
+		avatar.style.transform = 'scale(-1,1)';
+	}
+	CheckIsTouching();
+});
+
+upBtn.addEventListener('click', function (e) {
+	const currTop = extractPosition(avatar.style.top);
+	if (currTop - 50 > 0) {
+		moveVertical(avatar, -50, currTop);
+	}
+	CheckIsTouching();
+});
+
+downBtn.addEventListener('click', function (e) {
+	const currTop = extractPosition(avatar.style.top);
+	if (currTop + 50 < window.innerHeight - avatar.getBoundingClientRect().height) {
+		moveVertical(avatar, 50, currTop);
+	}
+	CheckIsTouching();
+});
+
 window.addEventListener('keydown', function (e) {
 	const currTop = extractPosition(avatar.style.top);
 	const currLeft = extractPosition(avatar.style.left);
-	if ((e.key === 'ArrowDown' || e.key === 'Down') && currTop + 50 < window.innerHeight - avatar.getBoundingClientRect().height) {
+	if ((e.key === 'ArrowDown' || e.key === 'Down' || e.className === 'right') && currTop + 50 < window.innerHeight - avatar.getBoundingClientRect().height) {
 		moveVertical(avatar, 50, currTop);
 	}
 	else if ((e.key === "ArrowUp" || e.key === 'Up') && currTop - 50 > 0) {
@@ -31,12 +71,17 @@ window.addEventListener('keydown', function (e) {
 		moveHorizontal(avatar, -50, currLeft)
 		avatar.style.transform = 'scale(-1,1)';
 	}
+	CheckIsTouching();
+});
+
+
+const CheckIsTouching = () => {
 	if (isTouching(avatar, coin)) {
 		moveCoin();
 		collectedCoin++;
 		score.innerText = collectedCoin;
 	}
-});
+}
 
 const moveVertical = (element, amount, top) => {
 	element.style.top = `${top + amount}px`;
