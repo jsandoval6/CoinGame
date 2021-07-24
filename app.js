@@ -12,7 +12,8 @@ function isTouching(a, b) {
 
 const avatar = document.querySelector('#player');
 const coin = document.querySelector('#coin');
-
+const score = document.querySelector('#scoreNumber');
+let collectedCoin = 0;
 window.addEventListener('keydown', function (e) {
 	const currTop = extractPosition(avatar.style.top);
 	const currLeft = extractPosition(avatar.style.left);
@@ -32,6 +33,8 @@ window.addEventListener('keydown', function (e) {
 	}
 	if (isTouching(avatar, coin)) {
 		moveCoin();
+		collectedCoin++;
+		score.innerText = collectedCoin;
 	}
 });
 
